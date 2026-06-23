@@ -28,9 +28,9 @@ DROP TABLE IF EXISTS departments;
 -- =========================================
 
 CREATE TABLE departments (
-    department_id   INT          AUTO_INCREMENT PRIMARY KEY,
-    department_name VARCHAR(50)  NOT NULL,
-    office_location VARCHAR(50)  NOT NULL
+    department_id INT AUTO_INCREMENT PRIMARY KEY,
+    department_name VARCHAR(50) NOT NULL,
+    office_location VARCHAR(50) NOT NULL
 );
 
 CREATE INDEX idx_departments_department_name
@@ -42,14 +42,13 @@ CREATE INDEX idx_departments_department_name
 -- =========================================
 
 CREATE TABLE lecturers (
-    lecturer_id   INT          AUTO_INCREMENT PRIMARY KEY,
-    first_name    VARCHAR(50)  NOT NULL,
-    last_name     VARCHAR(50)  NOT NULL,
-    email         VARCHAR(100) UNIQUE
-                      CHECK (email LIKE '%@%.%'),
-    phone_number  VARCHAR(11)  UNIQUE,
-    department_id INT          NOT NULL,
-    hire_date     DATE         NOT NULL,
+    lecturer_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE CHECK (email LIKE '%@%.%'),
+    phone_number VARCHAR(11) UNIQUE,
+    department_id INT NOT NULL,
+    hire_date DATE NOT NULL,
 
     CONSTRAINT fk_lecturer_department
         FOREIGN KEY (department_id)
@@ -66,19 +65,17 @@ CREATE INDEX idx_lecturers_name
 -- =========================================
 
 CREATE TABLE students (
-    student_id    INT          AUTO_INCREMENT PRIMARY KEY,
-    first_name    VARCHAR(50)  NOT NULL,
-    last_name     VARCHAR(50)  NOT NULL,
-    gender        VARCHAR(6)   NOT NULL
-                      CHECK (gender IN ('Male', 'Female')),
-    date_of_birth DATE         NOT NULL,
-    email         VARCHAR(100) UNIQUE
-                      CHECK (email LIKE '%@%.%'),
-    phone_number  VARCHAR(11)  NOT NULL,
-    home_address  VARCHAR(100) NOT NULL,
-    department_id INT          NOT NULL,
-    admission_date DATE        NOT NULL DEFAULT (CURRENT_DATE),
-    matric_number VARCHAR(50)  NOT NULL UNIQUE,
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    gender VARCHAR(6) NOT NULL CHECK (gender IN ('Male', 'Female')),
+    date_of_birth DATE NOT NULL,
+    email VARCHAR(100) UNIQUE CHECK (email LIKE '%@%.%'),
+    phone_number VARCHAR(11) NOT NULL,
+    home_address VARCHAR(100) NOT NULL,
+    department_id INT NOT NULL,
+    admission_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+    matric_number VARCHAR(50) NOT NULL UNIQUE,
 
     CONSTRAINT fk_student_department
         FOREIGN KEY (department_id)
@@ -95,13 +92,12 @@ CREATE INDEX idx_students_name
 -- =========================================
 
 CREATE TABLE courses (
-    course_id    INT          AUTO_INCREMENT PRIMARY KEY,
+    course_id INT AUTO_INCREMENT PRIMARY KEY,
     course_title VARCHAR(100) NOT NULL UNIQUE,
-    course_code  VARCHAR(10)  NOT NULL UNIQUE,
-    credit_unit  INT          NOT NULL
-                     CHECK (credit_unit > 0),
-    department_id INT         NOT NULL,
-    lecturer_id  INT          NOT NULL,
+    course_code VARCHAR(10) NOT NULL UNIQUE,
+    credit_unit INT NOT NULL CHECK (credit_unit > 0),
+    department_id INT NOT NULL,
+    lecturer_id  INT NOT NULL,
 
     CONSTRAINT fk_course_department
         FOREIGN KEY (department_id)
@@ -123,13 +119,12 @@ CREATE INDEX idx_courses_course_code
 -- =========================================
 
 CREATE TABLE enrollments (
-    enrollment_id  INT         AUTO_INCREMENT PRIMARY KEY,
-    student_id     INT         NOT NULL,
-    course_id      INT         NOT NULL,
-    semester       VARCHAR(6)  NOT NULL
-                       CHECK (semester IN ('First', 'Second')),
-    session        VARCHAR(10) NOT NULL,
-    enrollment_date DATE       NOT NULL DEFAULT (CURRENT_DATE),
+    enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    course_id INT NOT NULL,
+    semester VARCHAR(6)  NOT NULL CHECK (semester IN ('First', 'Second')),
+    session VARCHAR(10) NOT NULL,
+    enrollment_date DATE NOT NULL DEFAULT (CURRENT_DATE),
 
     CONSTRAINT fk_enrollment_student
         FOREIGN KEY (student_id)
@@ -155,12 +150,11 @@ CREATE INDEX idx_enrollments_semester
 -- =========================================
 
 CREATE TABLE results (
-    result_id     INT           AUTO_INCREMENT PRIMARY KEY,
-    enrollment_id INT           NOT NULL UNIQUE,
-    score         INT           NOT NULL
-                        CHECK (score BETWEEN 0 AND 100),
+    result_id INT AUTO_INCREMENT PRIMARY KEY,
+    enrollment_id INT NOT NULL UNIQUE,
+    score INT NOT NULL CHECK (score BETWEEN 0 AND 100),
 
-    grade  CHAR(1) GENERATED ALWAYS AS (
+    grade CHAR(1) GENERATED ALWAYS AS (
         CASE
             WHEN score >= 70 THEN 'A'
             WHEN score >= 60 THEN 'B'
@@ -200,11 +194,10 @@ CREATE INDEX idx_results_grade
 -- =========================================
 
 CREATE TABLE attendances (
-    attendance_id     INT         AUTO_INCREMENT PRIMARY KEY,
-    enrollment_id     INT         NOT NULL,
-    attendance_date   DATE        NOT NULL,
-    attendance_status VARCHAR(10) NOT NULL
-                          CHECK (attendance_status IN ('Present', 'Absent')),
+    attendance_id INT AUTO_INCREMENT PRIMARY KEY,
+    enrollment_id INT NOT NULL,
+    attendance_date DATE NOT NULL,
+    attendance_status VARCHAR(10) NOT NULL CHECK (attendance_status IN ('Present', 'Absent')),
 
     CONSTRAINT fk_attendance_enrollment
         FOREIGN KEY (enrollment_id)
@@ -224,13 +217,12 @@ CREATE INDEX idx_attendances_status
 -- =========================================
 
 CREATE TABLE fees (
-    fee_id         INT            AUTO_INCREMENT PRIMARY KEY,
-    student_id     INT            NOT NULL,
-    enrollment_id  INT            NOT NULL,
-    amount_paid    DECIMAL(10, 2) NOT NULL
-                       CHECK (amount_paid > 0),
-    payment_date   DATE           NOT NULL DEFAULT (CURRENT_DATE),
-    payment_method VARCHAR(20)    NOT NULL,
+    fee_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    enrollment_id INT NOT NULL,
+    amount_paid DECIMAL(10, 2) NOT NULL CHECK (amount_paid > 0),
+    payment_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+    payment_method VARCHAR(20) NOT NULL,
 
     CONSTRAINT fk_fee_student
         FOREIGN KEY (student_id)
@@ -255,12 +247,12 @@ CREATE INDEX idx_fees_amount_paid
 -- =========================================
 
 CREATE TABLE guardians (
-    guardian_id   INT          AUTO_INCREMENT PRIMARY KEY,
-    student_id    INT          NOT NULL,
-    guardian_name VARCHAR(50)  NOT NULL,
-    relationship  VARCHAR(20)  NOT NULL,
-    phone_number  VARCHAR(11)  NOT NULL,
-    home_address  VARCHAR(100) NOT NULL,
+    guardian_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    guardian_name VARCHAR(50) NOT NULL,
+    relationship VARCHAR(20) NOT NULL,
+    phone_number VARCHAR(11) NOT NULL,
+    home_address VARCHAR(100) NOT NULL,
 
     CONSTRAINT fk_guardian_student
         FOREIGN KEY (student_id)
@@ -314,8 +306,7 @@ VALUES
 -- =========================================
 
 INSERT INTO students
-    (first_name, last_name, gender, date_of_birth, email,
-     phone_number, home_address, admission_date, department_id, matric_number)
+    (first_name, last_name, gender, date_of_birth, email, phone_number, home_address, admission_date, department_id, matric_number)
 VALUES
     ('John',    'Doe',      'Male',   '2002-03-15', 'john.doe@email.com',  '08011111111', 'Lagos',         '2024-01-10', 1,  '2024001'),
     ('Mary',    'Johnson',  'Female', '2001-07-20', 'mary.j@email.com',    '08022222222', 'Abuja',         '2024-01-10', 2,  '2024002'),
