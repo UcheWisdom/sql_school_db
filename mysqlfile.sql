@@ -1,6 +1,5 @@
 -- =========================================
 -- SCHOOL MANAGEMENT SYSTEM
--- Converted from T-SQL (SQL Server) to MySQL
 -- =========================================
 
 CREATE DATABASE IF NOT EXISTS schools;
